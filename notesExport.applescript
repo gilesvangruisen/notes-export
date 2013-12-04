@@ -1,3 +1,4 @@
+
 on buildTitle(originalText)
 	set normalizedText to my replace(originalText, ":", "-")
 	set finalTitle to my firstChars(normalizedText, 100)
@@ -42,11 +43,16 @@ tell application "Notes"
 	repeat with each in every note
 		set noteBody to body of each
 		set noteTime to creation date of each as text
-		
+		set noteTime to (do shell script "date -j -f \"%A, %B %d, %Y at %T\" \"" & noteTime & "\" +\"%s\"")
+		log properties of creation date of each
 		set totalText to ((totalText as text) & noteBody as text) & "
+--FETCHNOTES EPOCH DATE--
 " & noteTime & "
---FETCHNOTES EON--"
+--FETCHNOTES EON--
+
+"
 	end repeat
+	
 	
 	set filename to ((exportFolder as string) & "mynotes" & ".txt")
 	my writeToFile(filename, totalText as text)
