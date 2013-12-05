@@ -53,7 +53,7 @@ tell application "Notes"
 		if counter < (count of notes) and counter ­ 0 then
 			set totalText to (totalText as text) & ","
 		end if
-		set totalText to (((totalText as text) & "{\"text\":\"" & noteBody as text) & "\", \"time\":\"" & noteTimeString as text) & "\"}"
+		set totalText to (((totalText as text) & "{\"text\":\"" & noteBody as text) & "\", \"time\":\"" & noteTime as text) & "\"}"
 		
 		set counter to counter + 1
 	end repeat
