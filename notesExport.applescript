@@ -38,19 +38,21 @@ tell application "Notes"
 " & "Exactly " & (count of notes) & " notes are stored in the application. " & "Each one of them will be exported as a simple HTML file stored in a folder of your choice." with title "Notes Export" buttons {"Cancel", "Proceed"} cancel button "Cancel" default button "Proceed"
 	set exportFolder to choose folder
 	set counter to 0
-	set totalText to ""
+	set totalText to "{\"notes\":["
 	
 	repeat with each in every note
 		set noteBody to body of each
 		set noteTime to creation date of each as text
 		set noteTime to (do shell script "date -j -f \"%A, %B %d, %Y at %T\" \"" & noteTime & "\" +\"%s\"")
 		log properties of creation date of each
-		set totalText to ((totalText as text) & noteBody as text) & "
+		if counter < (count of notes) then
+			set totalText to (totalText as text) & ","
+		end if
+		set totalText to ((totalText as text) & noteBody as text) & "\"
 --FETCHNOTES EPOCH DATE--
-" & noteTime & "
---FETCHNOTES EON--
-
-"
+, \"date\":\"" & noteTime & "\"}"
+		
+		set counter to counter + 1
 	end repeat
 	
 	
