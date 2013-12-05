@@ -42,23 +42,24 @@ tell application "Notes"
 	
 	repeat with each in every note
 		set noteBody to body of each
+		set noteBody to my replace(noteBody, "\\", "\\\\")
 		set noteBody to my replace(noteBody, "\"", "\\\"")
 		set noteBody to my replace(noteBody, "
 ", "\\n")
 		set noteBody to my replace(noteBody, "	", " ")
-		set noteTime to creation date of each as text
-		set noteTime to (do shell script "date -j -f \"%A, %B %d, %Y at %T\" \"" & noteTime & "\" +\"%s\"")
-		log properties of creation date of each
+		set noteTime to creation date of each
+		set noteTimeString to weekday of noteTime & ", " & month of noteTime & " " & day of noteTime & ", " & year of noteTime & " " & time string of noteTime
+		set noteTime to (do shell script "date -j -f \"%A, %B %d, %Y %T\" \"" & noteTimeString & "\" +\"%s\"")
 		if counter < (count of notes) and counter ­ 0 then
 			set totalText to (totalText as text) & ","
 		end if
-		set totalText to ((totalText as text) & "{\"text\":\"" & noteBody as text) & "\", \"time\":\"" & noteTime & "\"}"
+		set totalText to (((totalText as text) & "{\"text\":\"" & noteBody as text) & "\", \"time\":\"" & noteTimeString as text) & "\"}"
 		
 		set counter to counter + 1
 	end repeat
 	
 	set totalText to (totalText as text) & "]"
-	set filename to ((exportFolder as string) & "mynotes" & ".txt")
+	set filename to ((exportFolder as string) & "mynotes" & ".json")
 	my writeToFile(filename, totalText as text)
 	
 	display alert "Notes Export" message "All notes were exported successfully." as informational
