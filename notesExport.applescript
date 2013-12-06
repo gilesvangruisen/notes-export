@@ -42,6 +42,8 @@ tell application "Notes"
 	
 	repeat with each in every note
 		set noteBody to body of each
+		set noteBody to my replace(noteBody, "Õ", "'")
+		set noteBody to my replace(noteBody, "Ó", "\"")
 		set noteBody to my replace(noteBody, "\\", "\\\\")
 		set noteBody to my replace(noteBody, "\"", "\\\"")
 		set noteBody to my replace(noteBody, "
