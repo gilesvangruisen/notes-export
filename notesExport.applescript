@@ -30,14 +30,13 @@ on writeToFile(filename, filecontents)
 	close access the output
 end writeToFile
 
+display dialog "Welcome to the Apple Notes exporter for Fetchnotes. Your notes will open and you will be asked to select a destination for the export file. Once this is complete, please upload the file at http://apple.fetchnotes.com. Please press \"OK\" to export your notes now." cancel button "Cancel" default button "OK"
 
 tell application "Notes"
 	activate
-	display dialog "This is the export utility for Notes.app.
-
-" & "Exactly " & (count of notes) & " notes are stored in the application. " & "Each one of them will be exported as a simple HTML file stored in a folder of your choice." with title "Notes Export" buttons {"Cancel", "Proceed"} cancel button "Cancel" default button "Proceed"
 	set exportFolder to choose folder
-	set counter to 0
+	log exportFolder
+	set counter to 8
 	set totalText to "["
 	
 	repeat with each in every note
@@ -63,7 +62,7 @@ tell application "Notes"
 	set totalText to (totalText as text) & "]"
 	set filename to ((exportFolder as string) & "mynotes" & ".json")
 	my writeToFile(filename, totalText as text)
-	
-	display alert "Notes Export" message "All notes were exported successfully." as informational
+	display dialog "Your notes have been exported. Please upload the \"mynotes.json\" file to http://apple.fetchnotes.com/"
+	do shell script "open " & quoted form of POSIX path of exportFolder
 	
 end tell
