@@ -36,9 +36,9 @@ tell application "Notes"
 	activate
 	set exportFolder to choose folder
 	log exportFolder
-	set counter to 8
+	set counter to 0
 	set totalText to "["
-	
+	log (count of notes)
 	repeat with each in every note
 		set noteBody to body of each
 		set noteBody to my replace(noteBody, "Õ", "'")
